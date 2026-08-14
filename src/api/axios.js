@@ -9,6 +9,8 @@ const api = axios.create({
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
+    'Bypass-Tunnel-Remainder': 'true',
+    'ngrok-skip-browser-warning': 'true',
   },
 });
 
