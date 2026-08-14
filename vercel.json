@@ -3,6 +3,6 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "env": {
-    "VITE_API_URL": "https://skripsi-taslim-backend.loca.lt/api"
+    "VITE_API_URL": "https://skripsi-taslim-setiawan-backend.vercel.app/api"
   }
 }
