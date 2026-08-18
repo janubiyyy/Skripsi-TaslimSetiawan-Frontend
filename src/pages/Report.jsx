@@ -11,7 +11,10 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+import { useFilterStore } from '../store/filterStore';
+
 export default function Report() {
+  const { selectedTahun, selectedGerbang, selectedMetric } = useFilterStore();
   const [loading, setLoading] = useState(true);
   const [timeseriesRes, setTimeseriesRes] = useState(null);
   const [datasetList, setDatasetList] = useState([]);
@@ -21,8 +24,8 @@ export default function Report() {
       setLoading(true);
       try {
         const [tsRes, dsRes] = await Promise.all([
-          timeseriesAPI.getSummary(),
-          datasetAPI.getAll({ limit: 1000 }),
+          timeseriesAPI.getSummary({ gerbang: selectedGerbang, tahun: selectedTahun, metric: selectedMetric }),
+          datasetAPI.getAll({ limit: 1000, gerbang: selectedGerbang, tahun: selectedTahun }),
         ]);
         setTimeseriesRes(tsRes.data.data || null);
         setDatasetList(dsRes.data.data || []);
@@ -33,7 +36,8 @@ export default function Report() {
       }
     };
     loadReportData();
-  }, []);
+  }, [selectedTahun, selectedGerbang, selectedMetric]);
+
 
   // PDF Handlers
   const handleExportPDFTable = () => {

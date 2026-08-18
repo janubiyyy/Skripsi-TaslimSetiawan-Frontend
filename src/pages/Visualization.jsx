@@ -34,10 +34,18 @@ export default function Visualization() {
     setError(null);
     try {
       const [kmData, tsData, elData] = await Promise.allSettled([
-        kmeansAPI.getResults(kValue),
-        timeseriesAPI.getSummary({ gerbang: selectedGerbang, metric: selectedMetric }),
+        kmeansAPI.getResults(kValue, {
+          tahun: selectedTahun,
+          gerbang: selectedGerbang,
+        }),
+        timeseriesAPI.getSummary({
+          gerbang: selectedGerbang,
+          tahun: selectedTahun,
+          metric: selectedMetric,
+        }),
         kmeansAPI.getElbow(2, 8),
       ]);
+
 
       if (kmData.status === 'fulfilled') setKmeansRes(kmData.value.data.data);
       if (tsData.status === 'fulfilled') setTimeseriesRes(tsData.value.data.data);
