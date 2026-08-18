@@ -203,8 +203,9 @@ export default function Dashboard() {
       {/* Line Chart & Doughnut Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 card p-5">
-          <TimeSeriesLineChart yoyData={yoyData} metric={selectedMetric} height={320} />
+          <TimeSeriesLineChart yoyData={yoyData} selectedTahun={selectedTahun} metric={selectedMetric} height={320} />
         </div>
+
 
         <div className="lg:col-span-1 card p-5">
           <ClusterPieChart clusters={kmeansRes?.clusters || []} height={320} />

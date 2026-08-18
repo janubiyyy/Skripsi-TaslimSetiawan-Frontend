@@ -154,8 +154,9 @@ export default function Visualization() {
       {/* Section 1: Line Chart (Time Series) & Bar Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card p-5">
-          <TimeSeriesLineChart yoyData={yoyData} metric={selectedMetric} height={340} />
+          <TimeSeriesLineChart yoyData={yoyData} selectedTahun={selectedTahun} metric={selectedMetric} height={340} />
         </div>
+
 
         <div className="card p-5">
           <VolumeBarChart trendData={trenData} height={340} />

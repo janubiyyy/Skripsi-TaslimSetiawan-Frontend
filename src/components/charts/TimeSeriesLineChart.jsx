@@ -7,7 +7,7 @@ import { baseOptions, YEAR_PALETTE } from './index.js';
 
 const INDEKS_LABELS = ['H-7','H-6','H-5','H-4','H-3','H-2','H-1','H','H+1','H+2','H+3','H+4','H+5','H+6','H+7'];
 
-export default function TimeSeriesLineChart({ yoyData = {}, metric = 'masuk', height = 320 }) {
+export default function TimeSeriesLineChart({ yoyData = {}, selectedTahun = null, metric = 'masuk', height = 320 }) {
   if (!yoyData || (Object.keys(yoyData).length === 0 && !yoyData?.series)) {
     return (
       <div className="flex items-center justify-center h-64 text-gray-400 text-sm">
@@ -20,17 +20,20 @@ export default function TimeSeriesLineChart({ yoyData = {}, metric = 'masuk', he
 
   // Support series array format
   if (yoyData?.series && Array.isArray(yoyData.series)) {
-    datasets = yoyData.series.map((s, idx) => ({
-      label: s.name || `Tahun ${idx + 1}`,
-      data: s.data || [],
-      borderColor: YEAR_PALETTE[idx % YEAR_PALETTE.length],
-      backgroundColor: 'transparent',
-      tension: 0.4,
-      pointRadius: 3,
-      pointHoverRadius: 5,
-      borderWidth: 2,
-      spanGaps: true,
-    }));
+    datasets = yoyData.series.map((s, idx) => {
+      const isSelected = selectedTahun && String(selectedTahun) === String(s.name);
+      return {
+        label: s.name || `Tahun ${idx + 1}`,
+        data: s.data || [],
+        borderColor: YEAR_PALETTE[idx % YEAR_PALETTE.length],
+        backgroundColor: 'transparent',
+        tension: 0.4,
+        pointRadius: isSelected ? 6 : 3,
+        pointHoverRadius: isSelected ? 8 : 5,
+        borderWidth: isSelected ? 4 : (selectedTahun ? 1.5 : 2),
+        spanGaps: true,
+      };
+    });
   } else if (typeof yoyData === 'object') {
     // Support year-keyed object format { '2022': { data_per_hari: [...] } }
     const years = Object.keys(yoyData).filter((y) => y !== 'labels' && y !== 'series').sort();
@@ -39,6 +42,7 @@ export default function TimeSeriesLineChart({ yoyData = {}, metric = 'masuk', he
       : 'avg_v_masuk';
 
     datasets = years.map((year, idx) => {
+      const isSelected = selectedTahun && String(selectedTahun) === String(year);
       const yearObj = yoyData[year];
       const yearRows = Array.isArray(yearObj) ? yearObj : yearObj?.data_per_hari || [];
       const dataByIndeks = {};
@@ -52,9 +56,9 @@ export default function TimeSeriesLineChart({ yoyData = {}, metric = 'masuk', he
         borderColor: YEAR_PALETTE[idx % YEAR_PALETTE.length],
         backgroundColor: 'transparent',
         tension: 0.4,
-        pointRadius: 3,
-        pointHoverRadius: 5,
-        borderWidth: 2,
+        pointRadius: isSelected ? 6 : 3,
+        pointHoverRadius: isSelected ? 8 : 5,
+        borderWidth: isSelected ? 4 : (selectedTahun ? 1.5 : 2),
         spanGaps: true,
       };
     });
@@ -69,7 +73,7 @@ export default function TimeSeriesLineChart({ yoyData = {}, metric = 'masuk', he
       legend: { ...baseOptions.plugins.legend, position: 'top' },
       title: {
         display: true,
-        text: `Tren Volume ${metric === 'keluar' ? 'Keluar' : metric === 'total' ? 'Total' : 'Masuk'} H-7 s.d. H+7 (Year-on-Year)`,
+        text: `Tren Volume ${metric === 'keluar' ? 'Keluar' : metric === 'total' ? 'Total' : 'Masuk'} H-7 s.d. H+7 (Year-on-Year)${selectedTahun ? ` — Highlight Tahun ${selectedTahun}` : ''}`,
         font: { size: 13, weight: '600', family: 'Inter' },
         color: '#374151',
         padding: { bottom: 12 },
