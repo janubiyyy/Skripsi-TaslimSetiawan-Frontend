@@ -196,8 +196,9 @@ export default function Dashboard() {
 
         {/* Bar Chart — Volume Masuk vs Keluar H-7 s.d H+7 */}
         <div className="lg:col-span-2 card p-5">
-          <VolumeBarChart trendData={trenData} height={280} />
+          <VolumeBarChart trendData={trenData} metric={selectedMetric} height={280} />
         </div>
+
       </div>
 
       {/* Line Chart & Doughnut Chart */}

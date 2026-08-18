@@ -159,8 +159,9 @@ export default function Visualization() {
 
 
         <div className="card p-5">
-          <VolumeBarChart trendData={trenData} height={340} />
+          <VolumeBarChart trendData={trenData} metric={selectedMetric} height={340} />
         </div>
+
       </div>
 
       {/* Section 2: K-Means Scatter Plot & Pie Chart */}
